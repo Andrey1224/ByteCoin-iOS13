@@ -11,6 +11,8 @@ import Foundation
 protocol CoinManagerDelegate {
     
     func didFailWithError(error: Error)
+    
+    func didUpdateCoinData(coin: String)
 }
 
 struct CoinManager {
@@ -43,7 +45,8 @@ struct CoinManager {
                 }
                 if let safeData = data {
                     if let coinData1 = parseJSON(safeData) {
-                        print(String(format: "%.2f", coinData1))
+                        let coinString = String(format: "%.2f", coinData1)
+                        delegate?.didUpdateCoinData(coin: coinString)
                     }
                 }
                 
