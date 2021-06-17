@@ -10,7 +10,7 @@ import UIKit
 
 
 
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate {
+class ViewController: UIViewController  {
     
     
     
@@ -35,6 +35,33 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         currencyPicker.delegate = self
     }
 
+
+}
+
+//MARK: - CoinManagerDelegate
+
+extension ViewController: CoinManagerDelegate {
+    func didUpdateCoinData(coin: String, currencyData: String) {
+        DispatchQueue.main.async {
+            self.bitcoinLabel.text = coin
+            self.currencyLabel.text = currencyData
+            
+        }
+    }
+    
+    
+    
+    func didFailWithError(error: Error) {
+        print(error)
+    }
+    
+    
+    
+    
+}
+//MARK: - UIPickerViewDelegate
+
+extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -59,17 +86,4 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     
     
-    func didFailWithError(error: Error) {
-        print(error)
-    }
-    
-    func didUpdateCoinData(coin: String) {
-        
-        DispatchQueue.main.async {
-            self.bitcoinLabel.text = coin
-            
-        }
-    }
-
 }
-

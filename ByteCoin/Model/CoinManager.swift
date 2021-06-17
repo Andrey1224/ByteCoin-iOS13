@@ -12,7 +12,7 @@ protocol CoinManagerDelegate {
     
     func didFailWithError(error: Error)
     
-    func didUpdateCoinData(coin: String)
+    func didUpdateCoinData(coin: String, currencyData: String)
 }
 
 struct CoinManager {
@@ -29,24 +29,20 @@ struct CoinManager {
     func getCoinPrice(for currency: String) {
         
         let urlString = "\(baseURL)/\(currency)?apikey=\(apiKey)"
-        performRequest(with: urlString)
-    }
-    
-    func performRequest(with urlString: String) {
         
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
                 if error != nil {
-                    delegate?.didFailWithError(error: error!)
+                    self.delegate?.didFailWithError(error: error!)
                     return
                     
                     
                 }
                 if let safeData = data {
-                    if let coinData1 = parseJSON(safeData) {
+                    if let coinData1 = self.parseJSON(safeData) {
                         let coinString = String(format: "%.2f", coinData1)
-                        delegate?.didUpdateCoinData(coin: coinString)
+                        self.delegate?.didUpdateCoinData(coin: coinString, currencyData: currency)
                     }
                 }
                 
